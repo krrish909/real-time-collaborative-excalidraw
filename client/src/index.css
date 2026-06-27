@@ -1,4 +1,4 @@
-* {
+/* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -8,4 +8,314 @@ html, body, #root {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+/* ============================================================
+   Whiteboard SaaS — index.css
+   Drop this file next to app.tsx. Import it in main.tsx:
+     import './app.css'
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── Design Tokens ─────────────────────────────────────── */
+:root {
+  --brand-primary:   #2563EB;
+  --brand-light:     #EFF6FF;
+  --brand-glow:      rgba(37,99,235,0.15);
+
+  --surface-base:    #FFFFFF;
+  --surface-overlay: #F1F5F9;
+
+  --border-subtle:   rgba(15,23,42,0.08);
+  --border-default:  rgba(15,23,42,0.12);
+  --border-strong:   rgba(15,23,42,0.20);
+
+  --text-primary:    #0F172A;
+  --text-secondary:  #475569;
+  --text-tertiary:   #94A3B8;
+  --text-inverse:    #F8FAFC;
+
+  --success:         #10B981;
+  --danger:          #EF4444;
+  --danger-light:    #FEE2E2;
+
+  --toolbar-bg:      rgba(255,255,255,0.96);
+  --toolbar-border:  rgba(15,23,42,0.10);
+  --toolbar-shadow:  0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.12);
+
+  --active-bg:       #EFF6FF;
+  --active-border:   #BFDBFE;
+  --active-text:     #2563EB;
+
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-full: 9999px;
+
+  --font-ui:   'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', 'Fira Code', monospace;
+
+  --ease-out:  cubic-bezier(0.16,1,0.3,1);
+  --ease-snap: cubic-bezier(0.34,1.56,0.64,1);
+  --dur-fast:  120ms;
+  --dur-base:  200ms;
+  --dur-slow:  320ms;
+}
+
+/* ── Dark mode token overrides ── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-base:    #1E293B;
+    --surface-overlay: #0B1120;
+    --border-subtle:   rgba(248,250,252,0.06);
+    --border-default:  rgba(248,250,252,0.10);
+    --border-strong:   rgba(248,250,252,0.16);
+    --text-primary:    #F1F5F9;
+    --text-secondary:  #94A3B8;
+    --text-tertiary:   #475569;
+    --text-inverse:    #0F172A;
+    --toolbar-bg:      rgba(30,41,59,0.97);
+    --toolbar-border:  rgba(248,250,252,0.08);
+    --toolbar-shadow:  0 1px 3px rgba(0,0,0,0.24), 0 4px 24px rgba(0,0,0,0.32);
+    --active-bg:       rgba(37,99,235,0.18);
+    --active-border:   rgba(37,99,235,0.40);
+  }
+}
+
+/* ── Reset ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body, #root {
+  width: 100%; height: 100%; overflow: hidden;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  /* Dark canvas background */
+  background: #0F172A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+canvas {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  TOOLBAR                                         ║
+   ╚══════════════════════════════════════════════════╝ */
+
+.toolbar {
+  position:  fixed;
+  top:       14px;
+  left:      50%;
+  transform: translateX(-50%);
+  z-index:   1000;
+
+  display:     flex;
+  align-items: center;
+  gap:         2px;
+  padding:     6px 8px;
+
+  background:    var(--toolbar-bg);
+  border:        1px solid var(--toolbar-border);
+  border-radius: var(--radius-lg);
+  box-shadow:    var(--toolbar-shadow);
+
+  backdrop-filter:         saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+
+  user-select: none;
+  white-space: nowrap;
+}
+
+.divider {
+  width:       1px;
+  height:      22px;
+  margin:      0 6px;
+  background:  var(--border-default);
+  flex-shrink: 0;
+}
+
+.toolbar-group {
+  display:     flex;
+  align-items: center;
+  gap:         2px;
+}
+
+/* ── Shared button base ── */
+.tool-btn, .width-btn, .toggle-btn, .action-btn {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  border:          none;
+  background:      transparent;
+  cursor:          pointer;
+  font-family:     var(--font-ui);
+  font-size:       13px;
+  font-weight:     500;
+  color:           var(--text-secondary);
+  transition:
+    background   var(--dur-fast) var(--ease-out),
+    color        var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform    var(--dur-fast) var(--ease-snap),
+    box-shadow   var(--dur-fast) var(--ease-out);
+}
+
+.tool-btn:active, .width-btn:active,
+.toggle-btn:active, .action-btn:active {
+  transform: scale(0.92);
+}
+
+/* ── Tool buttons ── */
+.tool-btn {
+  width:         34px;
+  height:        34px;
+  border-radius: var(--radius-md);
+  font-size:     15px;
+  position:      relative;
+}
+
+.tool-btn:hover { background: var(--surface-overlay); color: var(--text-primary); }
+
+.tool-btn.active {
+  background: var(--active-bg);
+  color:      var(--active-text);
+  box-shadow: inset 0 0 0 1.5px var(--active-border);
+}
+
+/* CSS tooltip */
+.tool-btn::after {
+  content:        attr(title);
+  position:       absolute;
+  bottom:         calc(100% + 8px);
+  left:           50%;
+  transform:      translateX(-50%) translateY(4px);
+  padding:        4px 8px;
+  border-radius:  var(--radius-sm);
+  background:     var(--text-primary);
+  color:          var(--text-inverse);
+  font-size:      11px;
+  font-weight:    500;
+  white-space:    nowrap;
+  opacity:        0;
+  pointer-events: none;
+  transition:     opacity var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+  letter-spacing: 0.02em;
+  z-index:        10;
+}
+.tool-btn:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Color swatches ── */
+.color-swatch {
+  width:         20px;
+  height:        20px;
+  border-radius: var(--radius-full);
+  border:        2px solid transparent;
+  cursor:        pointer;
+  outline:       none;
+  flex-shrink:   0;
+  transition:    transform var(--dur-fast) var(--ease-snap), box-shadow var(--dur-fast);
+}
+.color-swatch:hover { transform: scale(1.20); }
+.color-swatch.active {
+  transform:  scale(1.15);
+  box-shadow: 0 0 0 2px var(--surface-base), 0 0 0 4px var(--brand-primary);
+}
+
+/* ── Width buttons ── */
+.width-btn {
+  width:         32px;
+  height:        32px;
+  border-radius: var(--radius-md);
+}
+.width-btn:hover  { background: var(--surface-overlay); }
+.width-btn.active { background: var(--active-bg); box-shadow: inset 0 0 0 1.5px var(--active-border); }
+
+/* ── Toggle buttons ── */
+.toggle-btn {
+  height:         30px;
+  padding:        0 10px;
+  border-radius:  var(--radius-sm);
+  border:         1px solid var(--border-subtle);
+  font-size:      12px;
+  letter-spacing: 0.03em;
+}
+.toggle-btn:hover  { background: var(--surface-overlay); border-color: var(--border-default); color: var(--text-primary); }
+.toggle-btn.active { background: var(--active-bg); border-color: var(--active-border); color: var(--active-text); }
+
+/* ── Action buttons ── */
+.action-btn {
+  height:         30px;
+  padding:        0 10px;
+  border-radius:  var(--radius-sm);
+  border:         1px solid var(--border-subtle);
+  font-size:      12px;
+  letter-spacing: 0.03em;
+}
+.action-btn:hover       { background: var(--surface-overlay); border-color: var(--border-default); color: var(--text-primary); }
+.action-btn.danger:hover { background: var(--danger-light); border-color: rgba(239,68,68,0.3); color: var(--danger); }
+.action-btn.icon-btn    { width: 30px; padding: 0; font-size: 15px; }
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  STATUS BAR                                      ║
+   ╚══════════════════════════════════════════════════╝ */
+
+.statusbar {
+  position: fixed;
+  bottom:   0;
+  left:     0;
+  right:    0;
+  z-index:  999;
+
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         0 16px;
+  height:          28px;
+
+  background:  rgba(15,23,42,0.88);
+  border-top:  1px solid rgba(255,255,255,0.06);
+  backdrop-filter:         blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  font-family: var(--font-mono);
+  font-size:   11px;
+  color:       rgba(148,163,184,0.80);
+  user-select: none;
+}
+
+.statusbar-left, .statusbar-right {
+  display:     flex;
+  align-items: center;
+  gap:         14px;
+}
+
+.statusbar-dot {
+  width:         6px;
+  height:        6px;
+  border-radius: var(--radius-full);
+  background:    var(--success);
+  box-shadow:    0 0 0 2px rgba(16,185,129,0.22);
+  flex-shrink:   0;
+}
+
+/* ── Focus ring (a11y) ── */
+:focus-visible {
+  outline:        2px solid var(--brand-primary);
+  outline-offset: 2px;
+  border-radius:  var(--radius-sm);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:  0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

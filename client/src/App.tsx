@@ -3,7 +3,7 @@
 // Make sure app.css is imported in main.tsx:  import './app.css'
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import "./app.css";   // ← add this if not already in main.tsx
+  // ← add this if not already in main.tsx
 
 /* ================= TYPES ================= */
 
