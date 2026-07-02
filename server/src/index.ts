@@ -57,7 +57,7 @@ wss.on("connection", async (ws, req) => {
 
     const boardId = url.searchParams.get("boardId");
     const token = url.searchParams.get("token");
-
+   
     if (!boardId || !token) {
       ws.close(1008, "Missing boardId or token");
       return;
