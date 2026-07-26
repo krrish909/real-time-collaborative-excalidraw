@@ -1,4 +1,4 @@
-# Collaborative Excalidraw Clone
+
 
 A real-time collaborative whiteboard application inspired by Excalidraw, allowing multiple users to draw, edit, and collaborate on the same canvas simultaneously.
 
