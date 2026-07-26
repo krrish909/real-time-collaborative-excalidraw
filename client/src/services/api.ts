@@ -3,7 +3,7 @@ import type { Board, CreateBoardRequest, UpdateBoardRequest } from "../types/boa
 
 // ── Base URL ──────────────────────────────────────────────────────────────────
 // Set VITE_API_URL in your .env  (e.g. http://localhost:3001)
-const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
+const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:4003";
 
 // ── Token helpers ─────────────────────────────────────────────────────────────
 export const TOKEN_KEY = "wb_token";

@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+
+  redis:
+    image: redis:7-alpine
+    container_name: whiteboard-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: whiteboard-backend
+    ports:
+      - "4003:4003"
+    environment:
+      - PORT=4003
+      - DATABASE_URL=postgresql://neondb_owner:npg_rcjk8TK3NzYf@ep-withered-cherry-aoiotsot-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      - JWT_SECRET=change-me
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: whiteboard-frontend
+    ports:
+      - "5175:5175"
+    environment:
+      - VITE_API_URL=http://localhost:4003
+      - VITE_WS_URL=ws://localhost:4003
+    depends_on:
+      - backend
+    restart: unless-stopped
+

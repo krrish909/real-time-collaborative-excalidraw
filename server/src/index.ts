@@ -38,7 +38,7 @@ const broadcast = (boardId: string, message: string): void => {
 
 // ── Redis pub/sub ─────────────────────────────────────────────────────────────
 
-sub.psubscribe("board:*", (err) => {
+sub.psubscribe("board:*", (err: Error | null | undefined) => {
   if (err) console.error("Redis psubscribe error:", err.message);
   else console.log("✅ Redis subscribed to board:*");
 });
@@ -140,7 +140,7 @@ wss.on("connection", async (ws, req) => {
 
 // ── Server startup ────────────────────────────────────────────────────────────
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Backend running on http://localhost:${PORT}`);
 });
 

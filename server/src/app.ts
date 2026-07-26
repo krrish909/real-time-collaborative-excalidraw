@@ -5,11 +5,13 @@ import boardRoutes from "./routes/board.routes.js";
 
 export const createApp = () => {
   const app = express();
-app.use(cors({
-  origin: "http://localhost:5175",
-  credentials: true
-}));
- 
+
+  app.use(cors({
+    origin: true,
+    credentials: true
+  }));
+
+  app.use(express.json());
 
   app.get("/health", (_req, res) => {
     res.json({ status: "ok" });
